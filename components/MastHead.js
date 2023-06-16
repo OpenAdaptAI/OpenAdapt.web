@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import Image from 'next/image';
 
 import EmailForm from '@components/EmailForm'
+import IndustriesGrid from '@components/IndustriesGrid'
 
 import styles from './MastHead.module.css'
 
@@ -59,7 +60,7 @@ export default function Home() {
                                 AI for Humans.
                             </h2>
                             <div>
-                                <Link className="btn btn-primary ml-2 mt-2" href="#start">
+                                <Link className="btn btn-primary ml-2 mt-2" href="#industries">
                                     Get Started
                                 </Link>
                             </div>
@@ -102,6 +103,7 @@ export default function Home() {
                     </div>
                 </div>
             </div>
+            <IndustriesGrid />
             {/*
       <Footer />
       */}
