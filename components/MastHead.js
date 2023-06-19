@@ -48,9 +48,9 @@ export default function Home() {
                                     <Image
                                       className="invert text-center inline"
                                       priority
-                                      src="/images/favicon.svg"
-                                      height={64}
-                                      width={64}
+                                      src="/images/masthead.svg"
+                                      height={100}
+                                      width={100}
                                       alt="Large Language Model"
                                     />
                                 </motion.div>
