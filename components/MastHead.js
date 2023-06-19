@@ -52,6 +52,7 @@ export default function Home() {
                                       height={100}
                                       width={100}
                                       alt="Large Language Model"
+                                      style={{ marginLeft: '55px' }}
                                     />
                                 </motion.div>
                                 <FontAwesomeIcon icon={faBoxOpen} className="text-5xl" />
