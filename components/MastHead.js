@@ -34,9 +34,9 @@ export default function Home() {
                                     <Image
                                       className="invert text-center inline"
                                       priority
-                                      src="/images/masthead.svg"
-                                      height={64}
-                                      width={64}
+                                      src="/images/new_masthead.svg"
+                                      height={85}
+                                      width={85}
                                       alt="Large Language Model"
                                     />
                                 </motion.div>
