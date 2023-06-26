@@ -1,6 +1,4 @@
 import Link from "next/link"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBoxOpen, faBrain } from '@fortawesome/free-solid-svg-icons'
 import { motion } from "framer-motion"
 import Image from 'next/image';
 
@@ -33,27 +31,15 @@ export default function Home() {
                                       repeatDelay: 0,
                                     }}
                                 >
-                                    {/*
-                                    <FontAwesomeIcon icon={faBrain} className="text-5xl mb-2" />
-                                    <Image
-                                      className="hue-rotate-90 invert text-center inline absolute -ml-4 -mt-10"
-                                      priority
-                                      src="/images/favicon.svg"
-                                      height={64}
-                                      width={64}
-                                      alt="Large Language Model"
-                                    />
-                                    */}
                                     <Image
                                       className="invert text-center inline"
                                       priority
-                                      src="/images/favicon.svg"
+                                      src="/images/masthead.svg"
                                       height={64}
                                       width={64}
                                       alt="Large Language Model"
                                     />
                                 </motion.div>
-                                <FontAwesomeIcon icon={faBoxOpen} className="text-5xl" />
                             </div>
                             <h2 className="text-4xl my-10 font-extralight">
                                 AI for Humans.
