@@ -34,17 +34,6 @@ export default function Home() {
                                       repeatDelay: 0,
                                     }}
                                 >
-                                    {/*
-                                    <FontAwesomeIcon icon={faBrain} className="text-5xl mb-2" />
-                                    <Image
-                                      className="hue-rotate-90 invert text-center inline absolute -ml-4 -mt-10"
-                                      priority
-                                      src="/images/favicon.svg"
-                                      height={64}
-                                      width={64}
-                                      alt="Large Language Model"
-                                    />
-                                    */}
                                     <Image
                                       className="invert text-center inline"
                                       priority
