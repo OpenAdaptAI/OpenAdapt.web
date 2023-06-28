@@ -3,6 +3,7 @@ import { motion } from "framer-motion"
 import Image from 'next/image';
 
 import EmailForm from '@components/EmailForm'
+import IndustriesGrid from '@components/IndustriesGrid'
 
 import styles from './MastHead.module.css'
 
@@ -45,7 +46,7 @@ export default function Home() {
                                 AI for Humans.
                             </h2>
                             <div>
-                                <Link className="btn btn-primary ml-2 mt-2" href="#start">
+                                <Link className="btn btn-primary ml-2 mt-2" href="#industries">
                                     Get Started
                                 </Link>
                             </div>
@@ -88,6 +89,7 @@ export default function Home() {
                     </div>
                 </div>
             </div>
+            <IndustriesGrid />
             {/*
       <Footer />
       */}
@@ -95,7 +97,7 @@ export default function Home() {
         <div className={styles.section}>
             <div className="relative flex items-center justify-center mb-2 mx-2 md-12">
                 <div className="grid grid-cols-1 break-words">
-                    <h2 id="start" className="text-2xl mt-10">Getting Started</h2>
+                    <h2 id="start" className="text-2xl mt-10">For Developers</h2>
                             <h3 className="mt-5"><b>Windows</b></h3>
                             <ul className="mt-2 list-disc list-inside">
                                 <li>Press Windows Key, type "powershell", and press Enter</li>
