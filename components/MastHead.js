@@ -7,11 +7,10 @@ import EmailForm from '@components/EmailForm'
 import IndustriesGrid from '@components/IndustriesGrid'
 
 import styles from './MastHead.module.css'
-
-// Import the SVG files as React components
-import EyeSvg from 'public/images/;
-import HandSvg from './hand.svg';
-import BubbleSvg from './bubble.svg';
+import Eye from 'public/images/eye.svg';
+import Hand from 'public/images/hand.svg';
+import Bubble from 'public/images/bubble.svg';
+import Icon from 'public/images/favicon.svg';
 
 export default function Home() {
     const [feedbackData, setFeedbackData] = useState({
