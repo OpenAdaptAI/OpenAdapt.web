@@ -7,10 +7,6 @@ import EmailForm from '@components/EmailForm'
 import IndustriesGrid from '@components/IndustriesGrid'
 
 import styles from './MastHead.module.css'
-import Eye from 'public/images/eye.svg';
-import Hand from 'public/images/hand.svg';
-import Bubble from 'public/images/bubble.svg';
-import Icon from 'public/images/favicon.svg';
 
 export default function Home() {
     const [feedbackData, setFeedbackData] = useState({
@@ -29,7 +25,7 @@ export default function Home() {
                                 <span className="font-thin">Open</span>Adapt
                                 <span className="font-thin">.AI</span>
                             </h1>
-                            <div className="flex flex-col align-items-center justify-content-center mr-2">
+                            <div className="relative flex flex-col align-items-center justify-content-center">
                                 <motion.div
                                     animate={{
                                         y: [-3, 3, -3]
@@ -42,16 +38,37 @@ export default function Home() {
                                       repeatDelay: 0,
                                     }}
                                 >
-                                    <Image
-                                      className="invert text-center inline"
-                                      priority
-                                      src="/images/new_masthead.svg"
-                                      height={85}
-                                      width={85}
-                                      alt="Large Language Model"
-                                    />
+                                        <Image
+                                        className="absolute invert top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                                        src="/images/bubble.svg"
+                                        height={85}
+                                        width={85}
+                                        alt="Bubble"
+                                        />
+                                        <Image
+                                        className="absolute invert top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                                        src="/images/eye.svg"
+                                        height={40}
+                                        width={40}
+                                        alt="Eye"
+                                        />
+                                        <Image
+                                        className="absolute invert top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                                        src="/images/hand.svg"
+                                        height={40}
+                                        width={40}
+                                        alt="Hand"
+                                        />
+                                        <Image
+                                        className="absolute invert top-1/2 left-1/2 transform -translate-x-1/2 translate-y-1/2"
+                                        src="/images/favicon.svg"
+                                        height={85}
+                                        width={85}
+                                        alt="Large Language Model"
+                                        />
                                 </motion.div>
                             </div>
+                            
                             <h2 className="text-4xl my-10 font-extralight">
                                 AI for Humans.
                             </h2>
