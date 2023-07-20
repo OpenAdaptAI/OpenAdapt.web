@@ -25,7 +25,7 @@ export default function Home() {
                                 <span className="font-thin">Open</span>Adapt
                                 <span className="font-thin">.AI</span>
                             </h1>
-                            <div className="relative flex flex-col align-items-center justify-content-center">
+                            <div className="flex flex-col align-items-center justify-content-center mr-2">
                                 <motion.div
                                     animate={{
                                         y: [-3, 3, -3]
@@ -39,35 +39,63 @@ export default function Home() {
                                     }}
                                 >
                                         <Image
-                                        className="absolute invert top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                                        className="invert text-center inline translate-x-full"
                                         src="/images/bubble.svg"
                                         height={85}
                                         width={85}
                                         alt="Bubble"
+                                        style={{ transform: 'translate(100px, 0px)' }}
                                         />
                                         <Image
-                                        className="absolute invert top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                                        src="/images/eye.svg"
-                                        height={40}
-                                        width={40}
-                                        alt="Eye"
-                                        />
-                                        <Image
-                                        className="absolute invert top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                                        src="/images/hand.svg"
-                                        height={40}
-                                        width={40}
-                                        alt="Hand"
-                                        />
-                                        <Image
-                                        className="absolute invert top-1/2 left-1/2 transform -translate-x-1/2 translate-y-1/2"
+                                        className="invert text-center inline"
                                         src="/images/favicon.svg"
                                         height={85}
                                         width={85}
                                         alt="Large Language Model"
+                                        style={{ transform: 'translate(-50px, 50px)' }}
                                         />
+                                        
                                 </motion.div>
+                                <motion.div
+                                            animate={{
+                                                scale: [0.9, 1, 0.9], // Zooms in (scale: 1.2) and out (scale: 1) in a loop
+                                            }}
+                                            transition={{
+                                                duration: 2,
+                                                ease: 'easeInOut',
+                                                repeat: Infinity, // Repeat the animation indefinitely
+                                            }}
+                                        >
+                                            <Image
+                                            className="invert text-center inline"
+                                            src="/images/eye.svg"
+                                            height={40}
+                                            width={40}
+                                            alt="Eye"
+                                            style={{ transform: 'translate(50px, -100px)' }}
+                                            />
+                                </motion.div>
+                                        <motion.div
+                                            animate={{
+                                                scale: [1, 0.9, 1], // Zooms in (scale: 1.2) and out (scale: 1) in a loop
+                                            }}
+                                            transition={{
+                                                duration: 2,
+                                                ease: 'easeInOut',
+                                                repeat: Infinity, // Repeat the animation indefinitely
+                                            }}
+                                        >
+                                            <Image
+                                            className="invert text-center inline"
+                                            src="/images/hand.svg"
+                                            height={30}
+                                            width={30}
+                                            alt="Hand"
+                                            style={{ transform: 'translate(80px, -120px)' }}
+                                            />
+                                        </motion.div>
                             </div>
+                            
                             
                             <h2 className="text-4xl my-10 font-extralight">
                                 AI for Humans.
