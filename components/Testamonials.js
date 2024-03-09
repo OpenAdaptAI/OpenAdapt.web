@@ -19,7 +19,7 @@ export default function Developers() {
             my procedures every month from now on. `,
             author: `Victor Abrich, MD, FHRS; Electrophysiologist at MercyOne Waterloo Heart Care`
         },
-        /*{
+        /* some test data: {
             text: `Great AI Work. Fixed the issues in my ship and now me and Chewbacca can race the galaxy! Vroom 🚀`,
             author: `Han Solo, space person`
         },
