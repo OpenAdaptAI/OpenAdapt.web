@@ -15,7 +15,7 @@ export default function Developers() {
             my procedures every month from now on. `,
             author: `Victor Abrich, MD, FHRS; Electrophysiologist at MercyOne Waterloo Heart Care`
         },
-        {
+        /* some test data: {
             text: `Great AI Work. Fixed the issues in my ship and now me and Chewbacca can race the galaxy! Vroom 🚀`,
             author: `Han Solo, space person`
         },
@@ -29,7 +29,7 @@ export default function Developers() {
         }, {
             text: `Managing procedural RVUs had become a headache until OpenAdapt came to the rescue. Our oversight led to $55K in lost revenue, and manual recovery efforts were eating into our time. OpenAdapt's automated solution streamlined the process, recovering the under-billed amount with ease. The personalized support provided by the OpenAdapt team ensured a smooth transition. I'm impressed with the results and will continue relying on OpenAdapt for our monthly audits.`,
             author: `Robert Davis`
-        },
+        },*/
     ]
     return (
         <div className={styles.card_box}>
@@ -39,7 +39,7 @@ export default function Developers() {
                     <Image
                         className="invert text-center inline"
                         priority
-                        src="/images/quote-left-solid.svg"https://github.com/OpenAdaptAI/OpenAdapt.web/pull/39/checks?check_run_id=19575736320
+                        src="/images/quote-left-solid.svg"
                         height={30}
                         width={30}
                         alt="Photo of quote"
