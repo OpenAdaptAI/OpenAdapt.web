@@ -3,9 +3,9 @@ import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons'
 import { faWindows, faApple } from '@fortawesome/free-brands-svg-icons';
-import styles from './Testamonials.module.css';
+import styles from './Testimonies.module.css';
 
-export default function Developers() {
+export default function Testimonies() {
     const TestimonyData = [
         {
             text: `My hospital had under-billed $75K worth of procedural RVUs which took me 20 
