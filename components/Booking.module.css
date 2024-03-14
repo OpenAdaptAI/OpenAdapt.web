@@ -1,0 +1,5 @@
+/*calendly-inline-widget w-screen h-screen*/
+.calendly {
+    min-width:320px;
+    height:700px;
+}

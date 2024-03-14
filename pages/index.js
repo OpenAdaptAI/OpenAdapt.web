@@ -5,6 +5,7 @@ import FeedbackForm from '@components/FeedbackForm';
 import Footer from "@components/Footer";
 import IndustriesGrid from '@components/IndustriesGrid';
 import MastHead from '@components/MastHead';
+import CalendlyForm from '@components/Booking';
 
 export default function Home() {
   const [feedbackData, setFeedbackData] = useState({
@@ -22,6 +23,7 @@ export default function Home() {
       <div ref={sectionRef}>
         <FeedbackForm feedbackData={feedbackData} setFeedbackData={setFeedbackData} />
       </div>
+      <CalendlyForm url={process.env.NEXT_PUBLIC_CALENDLY_LINK}/>
       <Footer />
     </div>
   )
