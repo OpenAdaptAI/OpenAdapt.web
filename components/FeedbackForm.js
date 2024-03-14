@@ -27,12 +27,12 @@ export default function FeedbackForm({ feedbackData }) {
         const formData = new FormData(event.target);
         formData.append('form-name', 'feedback');
 
-        fetch("/", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams(formData).toString(),
-        })
-        .then(response => {
+        try {
+            let response = await fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(formData).toString(),
+            })
             if (response.ok) {
                 setFormHidden(true); // Hide form and show success message on successful submission
                 console.log("Form successfully submitted");
@@ -40,11 +40,10 @@ export default function FeedbackForm({ feedbackData }) {
                 console.error("Form submission failed");
             }
             setIsSubmitting(false);
-        })
-        .catch((error) => {
+        } catch (error) {
             console.error("Form submission error:", error);
             setIsSubmitting(false);
-        });
+        }
     };
 
     return (
@@ -57,7 +56,7 @@ export default function FeedbackForm({ feedbackData }) {
                 <div className="fade-in" style={{ opacity: 1, transition: 'opacity 1s ease-in' }}>
                     <h2 className="font-extralight text-white text-2xl">
                         <FontAwesomeIcon icon={faPaperPlane} className="mr-4" />
-                        Get Ready
+                        Successfully submitted. We will reach out when your spot is available
                     </h2>
                 </div>
             ) : (

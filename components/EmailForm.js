@@ -18,13 +18,13 @@ export default function EmailForm() {
         const formData = new FormData(event.target);
         formData.append('form-name', 'email'); // Ensure this matches the name attribute of your form
 
-        // Using fetch to submit form data to Netlify according to their AJAX submission guide
-        fetch("/", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams(formData).toString(),
-        })
-        .then(response => {
+        try {
+            // Using fetch to submit form data to Netlify according to their AJAX submission guide
+            let response  = await fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(formData).toString(),
+            })
             setIsSubmitting(false);
             if (response.ok) {
                 setFormHidden(true); // Hide form and show success message on successful submission
@@ -34,11 +34,10 @@ export default function EmailForm() {
                 // Handle submission error
                 console.error("Form submission failed");
             }
-        })
-        .catch(error => {
+        } catch (error) {
             setIsSubmitting(false);
             console.error("Form submission error:", error);
-        });
+        }
     };
 
     return (
@@ -47,7 +46,7 @@ export default function EmailForm() {
                 <div className="fade-in" style={{ opacity: 1, transition: 'opacity 1s ease-in' }}>
                     <h4 className="font-extralight text-white">
                         <FontAwesomeIcon icon={faPaperPlane} className="mr-4" />
-                        Get Ready
+                        Successfully submitted. We will reach out when your spot is available
                     </h4>
                 </div>
             ) : (
