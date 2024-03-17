@@ -1,5 +1,7 @@
 .header{
     font-size: 30px;
+    background-color: rgb(0, 0, 28);
+
     text-align: center;
     color: whitesmoke;
 }
@@ -45,7 +47,7 @@
     //outline: 2px solid rgba(122, 105, 175, 0.6);
     background: #A36BF4;
     transform: scale(1.05);
-    transition: background-color 0.5s, color 0.5s;
+    transition: background-color 0.5s, color 0.5s, transform 0.5s;
   }
    .title {
     position: absolute;
