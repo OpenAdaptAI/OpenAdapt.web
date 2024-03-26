@@ -1,4 +1,4 @@
-.header{
+.header {
     font-size: 30px;
     background-color: rgb(0, 0, 28);
 
@@ -6,7 +6,7 @@
     color: whitesmoke;
 }
 
-.card_box{
+.card_box {
   text-align: center; 
     background-color: rgb(0, 0, 28);
 
@@ -61,9 +61,8 @@
     text-align: center;
     padding-bottom: 20px;
 
-    white-space: nowrap; 
     overflow: hidden;
-    text-overflow: ellipsis; 
+    white-space: normal;
   }
   .card .button:hover {
     color: white;
