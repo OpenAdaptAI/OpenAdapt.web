@@ -63,3 +63,6 @@ html body a:active * {
         opacity: 0;
     }
 }
+
+:root {
+  filter: invert(100%) hue-rotate(-220deg); }
