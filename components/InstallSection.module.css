@@ -233,6 +233,11 @@
 }
 
 @media (max-width: 600px) {
+    .installSection {
+        padding: 16px;
+        margin: 16px 8px;
+    }
+
     .commandGrid {
         grid-template-columns: 1fr;
     }
