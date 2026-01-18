@@ -1,53 +1,12 @@
 /**
  * API route to proxy pypistats.org requests
  * This avoids CORS issues when fetching from the client
+ *
+ * Uses the shared packageDiscovery utility to get the list of valid packages.
+ * This avoids HTTP calls between serverless functions which can be unreliable.
  */
 
-// Simple in-memory cache for discovered packages
-let discoveredPackagesCache = null;
-let cacheTimestamp = null;
-const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
-
-/**
- * Fetches the list of discovered openadapt-* packages
- * Uses the discover-packages API as the single source of truth
- * @returns {Promise<string[]>} - Array of package names
- */
-async function getDiscoveredPackages() {
-    // Return cached result if still valid
-    if (discoveredPackagesCache && cacheTimestamp && Date.now() - cacheTimestamp < CACHE_DURATION) {
-        return discoveredPackagesCache;
-    }
-
-    try {
-        // Call our own discovery API - the single source of truth for package lists
-        const baseUrl = process.env.VERCEL_URL
-            ? `https://${process.env.VERCEL_URL}`
-            : 'http://localhost:3000';
-        const response = await fetch(`${baseUrl}/api/discover-packages`);
-
-        if (!response.ok) {
-            throw new Error(`Discovery API returned ${response.status}`);
-        }
-
-        const data = await response.json();
-        discoveredPackagesCache = data.packages || [];
-        cacheTimestamp = Date.now();
-
-        return discoveredPackagesCache;
-    } catch (error) {
-        console.error('Failed to discover packages from API:', error);
-
-        // If we have a stale cache, use it instead of failing completely
-        if (discoveredPackagesCache) {
-            console.warn('Using stale package cache due to API failure');
-            return discoveredPackagesCache;
-        }
-
-        // If no cache exists, throw error - the discover-packages API has its own fallback
-        throw new Error('Unable to fetch package list and no cache available');
-    }
-}
+import { getDiscoveredPackages } from '../../utils/packageDiscovery.js';
 
 export default async function handler(req, res) {
     const { package: packageName, endpoint = 'overall', period } = req.query;
@@ -61,12 +20,20 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Only openadapt-* packages are allowed' });
     }
 
-    // Validate package exists in discovered packages
-    const allowedPackages = await getDiscoveredPackages();
-    if (!allowedPackages.includes(packageName)) {
-        return res.status(400).json({
-            error: 'Package not found in discovered openadapt packages',
-            hint: 'Package may not exist on PyPI yet',
+    try {
+        // Validate package exists in discovered packages
+        const allowedPackages = await getDiscoveredPackages();
+        if (!allowedPackages.includes(packageName)) {
+            return res.status(400).json({
+                error: 'Package not found in discovered openadapt packages',
+                hint: 'Package may not exist on PyPI yet',
+            });
+        }
+    } catch (error) {
+        console.error('Error validating package:', error);
+        return res.status(500).json({
+            error: 'Failed to validate package',
+            message: error.message,
         });
     }
 
