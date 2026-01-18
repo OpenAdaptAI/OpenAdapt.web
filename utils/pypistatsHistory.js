@@ -219,7 +219,8 @@ export function calculateGrowthStats(history) {
  * @returns {Promise<Object>} - Object with last_day, last_week, last_month totals and per-package breakdown
  */
 export async function getRecentDownloadStats() {
-    const results = await Promise.all(
+    // Use Promise.allSettled to handle individual package failures gracefully
+    const results = await Promise.allSettled(
         PYPI_PACKAGES.map(async (pkg) => {
             const recent = await getPackageRecentHistory(pkg);
             return { name: pkg, recent };
@@ -234,21 +235,27 @@ export async function getRecentDownloadStats() {
     const perPackage = {};
     let topPackage = { name: '', downloads: 0 };
 
-    results.forEach(({ name, recent }) => {
-        if (recent) {
-            const day = recent.last_day || 0;
-            const week = recent.last_week || 0;
-            const month = recent.last_month || 0;
+    results.forEach((result) => {
+        // Only process fulfilled promises
+        if (result.status === 'fulfilled') {
+            const { name, recent } = result.value;
+            if (recent) {
+                const day = recent.last_day || 0;
+                const week = recent.last_week || 0;
+                const month = recent.last_month || 0;
 
-            totals.last_day += day;
-            totals.last_week += week;
-            totals.last_month += month;
+                totals.last_day += day;
+                totals.last_week += week;
+                totals.last_month += month;
 
-            perPackage[name] = { last_day: day, last_week: week, last_month: month };
+                perPackage[name] = { last_day: day, last_week: week, last_month: month };
 
-            if (month > topPackage.downloads) {
-                topPackage = { name, downloads: month };
+                if (month > topPackage.downloads) {
+                    topPackage = { name, downloads: month };
+                }
             }
+        } else {
+            console.warn('Failed to fetch stats for a package:', result.reason);
         }
     });
 
