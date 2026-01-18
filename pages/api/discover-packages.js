@@ -1,13 +1,19 @@
 /**
  * API route to discover all openadapt-* packages from PyPI
  *
+ * *** SINGLE SOURCE OF TRUTH FOR PACKAGE LISTS ***
+ * This is the ONLY place where the fallback package list should be defined.
+ * All other code should call this API endpoint to get the package list.
+ *
  * Since PyPI no longer has a search API, we use a hybrid approach:
- * 1. Check a list of known/potential package names
+ * 1. Check a list of known/potential package names (POTENTIAL_PACKAGES)
  * 2. Verify each package exists via PyPI's JSON API
  * 3. Cache the results for 24 hours
+ * 4. Return a fallback list only if discovery fails
  */
 
 // Known and potential openadapt packages to check
+// This list can include packages that don't exist yet - they'll be filtered out during discovery
 const POTENTIAL_PACKAGES = [
     'openadapt',
     'openadapt-ml',
@@ -94,7 +100,9 @@ export default async function handler(req, res) {
     } catch (error) {
         console.error('Error discovering packages:', error);
 
-        // If discovery fails, return a fallback list of known packages
+        // FALLBACK LIST - Only returned if PyPI discovery completely fails
+        // This is the single source of truth for the fallback package list
+        // Last updated: 2025-01-18
         const fallbackPackages = [
             'openadapt',
             'openadapt-ml',
@@ -106,6 +114,7 @@ export default async function handler(req, res) {
             'openadapt-privacy',
         ];
 
+        // Cache fallback for shorter duration (1 hour) to retry discovery sooner
         res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate');
         return res.status(200).json({
             packages: fallbackPackages,

@@ -10,6 +10,7 @@ const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
 /**
  * Fetches the list of discovered openadapt-* packages
+ * Uses the discover-packages API as the single source of truth
  * @returns {Promise<string[]>} - Array of package names
  */
 async function getDiscoveredPackages() {
@@ -19,7 +20,7 @@ async function getDiscoveredPackages() {
     }
 
     try {
-        // Call our own discovery API
+        // Call our own discovery API - the single source of truth for package lists
         const baseUrl = process.env.VERCEL_URL
             ? `https://${process.env.VERCEL_URL}`
             : 'http://localhost:3000';
@@ -35,26 +36,16 @@ async function getDiscoveredPackages() {
 
         return discoveredPackagesCache;
     } catch (error) {
-        console.warn('Failed to discover packages, using fallback:', error);
+        console.error('Failed to discover packages from API:', error);
 
-        // Fallback to known packages
-        const fallbackPackages = [
-            'openadapt',
-            'openadapt-ml',
-            'openadapt-capture',
-            'openadapt-evals',
-            'openadapt-viewer',
-            'openadapt-grounding',
-            'openadapt-retrieval',
-            'openadapt-privacy',
-        ];
-
-        if (!discoveredPackagesCache) {
-            discoveredPackagesCache = fallbackPackages;
-            cacheTimestamp = Date.now() - CACHE_DURATION + 3600000; // Expire in 1 hour
+        // If we have a stale cache, use it instead of failing completely
+        if (discoveredPackagesCache) {
+            console.warn('Using stale package cache due to API failure');
+            return discoveredPackagesCache;
         }
 
-        return discoveredPackagesCache;
+        // If no cache exists, throw error - the discover-packages API has its own fallback
+        throw new Error('Unable to fetch package list and no cache available');
     }
 }
 

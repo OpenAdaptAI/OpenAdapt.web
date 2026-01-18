@@ -8,7 +8,7 @@ const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
 /**
  * Fetches the list of all openadapt-* packages from PyPI
- * Uses auto-discovery API with client-side caching
+ * Uses the discover-packages API as the single source of truth with client-side caching
  * @returns {Promise<string[]>} - Array of package names
  */
 async function getPackageList() {
@@ -18,6 +18,7 @@ async function getPackageList() {
     }
 
     try {
+        // Fetch from the discover-packages API - the single source of truth
         const response = await fetch('/api/discover-packages');
         if (!response.ok) {
             throw new Error(`Failed to discover packages: ${response.status}`);
@@ -29,27 +30,16 @@ async function getPackageList() {
 
         return cachedPackages;
     } catch (error) {
-        console.error('Error fetching package list:', error);
+        console.error('Error fetching package list from discover-packages API:', error);
 
-        // Fallback to known packages if discovery fails
-        const fallbackPackages = [
-            'openadapt',
-            'openadapt-ml',
-            'openadapt-capture',
-            'openadapt-evals',
-            'openadapt-viewer',
-            'openadapt-grounding',
-            'openadapt-retrieval',
-            'openadapt-privacy',
-        ];
-
-        // Cache fallback for shorter duration
-        if (!cachedPackages) {
-            cachedPackages = fallbackPackages;
-            cacheTimestamp = Date.now() - CACHE_DURATION + 3600000; // Expire in 1 hour
+        // If we have a stale cache, use it instead of failing completely
+        if (cachedPackages) {
+            console.warn('Using stale package cache due to API failure');
+            return cachedPackages;
         }
 
-        return cachedPackages;
+        // If no cache exists, throw error - the discover-packages API has its own fallback
+        throw new Error('Unable to fetch package list and no cache available');
     }
 }
 
