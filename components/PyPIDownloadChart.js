@@ -140,14 +140,32 @@ const PyPIDownloadChart = () => {
     useEffect(() => {
         const fetchAdditionalStats = async () => {
             try {
-                const [recent, github, versions] = await Promise.all([
+                // Use Promise.allSettled to ensure all promises complete even if some fail
+                const results = await Promise.allSettled([
                     getRecentDownloadStats(),
                     getGitHubStats(),
                     getPackageVersionHistory('openadapt'),
                 ]);
-                setRecentStats(recent);
-                setGithubStats(github);
-                setVersionHistory(versions);
+
+                // Handle each result individually
+                if (results[0].status === 'fulfilled' && results[0].value) {
+                    console.log('Recent stats loaded:', results[0].value);
+                    setRecentStats(results[0].value);
+                } else {
+                    console.error('Failed to load recent stats:', results[0].reason);
+                }
+
+                if (results[1].status === 'fulfilled' && results[1].value) {
+                    setGithubStats(results[1].value);
+                } else {
+                    console.error('Failed to load GitHub stats:', results[1].reason);
+                }
+
+                if (results[2].status === 'fulfilled' && results[2].value) {
+                    setVersionHistory(results[2].value);
+                } else {
+                    console.error('Failed to load version history:', results[2].reason);
+                }
             } catch (err) {
                 console.error('Error fetching additional stats:', err);
             }
