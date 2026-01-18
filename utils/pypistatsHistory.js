@@ -5,19 +5,56 @@
  * Original API documentation: https://pypistats.org/api/
  */
 
-const PYPI_PACKAGES = [
-    'openadapt',
-    'openadapt-ml',
-    'openadapt-capture',
-    'openadapt-evals',
-    'openadapt-viewer',
-    'openadapt-grounding',
-    'openadapt-retrieval',
-    'openadapt-privacy',
-    // 'openadapt-tray',      // TODO: Uncomment when published to PyPI
-    // 'openadapt-telemetry', // TODO: Uncomment when published to PyPI
-    // 'openadapt-agent',     // TODO: Uncomment when published to PyPI
-];
+let cachedPackages = null;
+let cacheTimestamp = null;
+const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+
+/**
+ * Fetches the list of all openadapt-* packages from PyPI
+ * Uses auto-discovery API with client-side caching
+ * @returns {Promise<string[]>} - Array of package names
+ */
+async function getPackageList() {
+    // Return cached result if still valid
+    if (cachedPackages && cacheTimestamp && Date.now() - cacheTimestamp < CACHE_DURATION) {
+        return cachedPackages;
+    }
+
+    try {
+        const response = await fetch('/api/discover-packages');
+        if (!response.ok) {
+            throw new Error(`Failed to discover packages: ${response.status}`);
+        }
+
+        const data = await response.json();
+        cachedPackages = data.packages || [];
+        cacheTimestamp = Date.now();
+
+        return cachedPackages;
+    } catch (error) {
+        console.error('Error fetching package list:', error);
+
+        // Fallback to known packages if discovery fails
+        const fallbackPackages = [
+            'openadapt',
+            'openadapt-ml',
+            'openadapt-capture',
+            'openadapt-evals',
+            'openadapt-viewer',
+            'openadapt-grounding',
+            'openadapt-retrieval',
+            'openadapt-privacy',
+        ];
+
+        // Cache fallback for shorter duration
+        if (!cachedPackages) {
+            cachedPackages = fallbackPackages;
+            cacheTimestamp = Date.now() - CACHE_DURATION + 3600000; // Expire in 1 hour
+        }
+
+        return cachedPackages;
+    }
+}
 
 /**
  * Fetches overall download history for a single PyPI package
@@ -93,8 +130,9 @@ async function getPackageRecentHistory(packageName) {
  * @returns {Promise<Object>} - Object containing combined history and per-package data
  */
 export async function getPyPIDownloadHistory(period = 'month') {
+    const packageList = await getPackageList();
     const results = await Promise.all(
-        PYPI_PACKAGES.map(async (pkg) => ({
+        packageList.map(async (pkg) => ({
             name: pkg,
             history: await getPackageHistory(pkg, period),
         }))
@@ -129,7 +167,7 @@ export async function getPyPIDownloadHistory(period = 'month') {
         combined,
         cumulativeHistory,
         packages: packageHistories,
-        packageNames: PYPI_PACKAGES,
+        packageNames: packageList,
     };
 }
 
@@ -219,9 +257,10 @@ export function calculateGrowthStats(history) {
  * @returns {Promise<Object>} - Object with last_day, last_week, last_month totals and per-package breakdown
  */
 export async function getRecentDownloadStats() {
+    const packageList = await getPackageList();
     // Use Promise.allSettled to handle individual package failures gracefully
     const results = await Promise.allSettled(
-        PYPI_PACKAGES.map(async (pkg) => {
+        packageList.map(async (pkg) => {
             const recent = await getPackageRecentHistory(pkg);
             return { name: pkg, recent };
         })

@@ -3,6 +3,61 @@
  * This avoids CORS issues when fetching from the client
  */
 
+// Simple in-memory cache for discovered packages
+let discoveredPackagesCache = null;
+let cacheTimestamp = null;
+const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+
+/**
+ * Fetches the list of discovered openadapt-* packages
+ * @returns {Promise<string[]>} - Array of package names
+ */
+async function getDiscoveredPackages() {
+    // Return cached result if still valid
+    if (discoveredPackagesCache && cacheTimestamp && Date.now() - cacheTimestamp < CACHE_DURATION) {
+        return discoveredPackagesCache;
+    }
+
+    try {
+        // Call our own discovery API
+        const baseUrl = process.env.VERCEL_URL
+            ? `https://${process.env.VERCEL_URL}`
+            : 'http://localhost:3000';
+        const response = await fetch(`${baseUrl}/api/discover-packages`);
+
+        if (!response.ok) {
+            throw new Error(`Discovery API returned ${response.status}`);
+        }
+
+        const data = await response.json();
+        discoveredPackagesCache = data.packages || [];
+        cacheTimestamp = Date.now();
+
+        return discoveredPackagesCache;
+    } catch (error) {
+        console.warn('Failed to discover packages, using fallback:', error);
+
+        // Fallback to known packages
+        const fallbackPackages = [
+            'openadapt',
+            'openadapt-ml',
+            'openadapt-capture',
+            'openadapt-evals',
+            'openadapt-viewer',
+            'openadapt-grounding',
+            'openadapt-retrieval',
+            'openadapt-privacy',
+        ];
+
+        if (!discoveredPackagesCache) {
+            discoveredPackagesCache = fallbackPackages;
+            cacheTimestamp = Date.now() - CACHE_DURATION + 3600000; // Expire in 1 hour
+        }
+
+        return discoveredPackagesCache;
+    }
+}
+
 export default async function handler(req, res) {
     const { package: packageName, endpoint = 'overall', period } = req.query;
 
@@ -10,22 +65,18 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Package name is required' });
     }
 
-    // Whitelist allowed packages for security
-    const allowedPackages = [
-        'openadapt',
-        'openadapt-ml',
-        'openadapt-capture',
-        'openadapt-evals',
-        'openadapt-viewer',
-        'openadapt-grounding',
-        'openadapt-retrieval',
-        'openadapt-privacy',
-        // 'openadapt-tray',      // TODO: Uncomment when published to PyPI
-        // 'openadapt-telemetry', // TODO: Uncomment when published to PyPI
-    ];
+    // Validate package name pattern (must start with 'openadapt')
+    if (!packageName.startsWith('openadapt')) {
+        return res.status(400).json({ error: 'Only openadapt-* packages are allowed' });
+    }
 
+    // Validate package exists in discovered packages
+    const allowedPackages = await getDiscoveredPackages();
     if (!allowedPackages.includes(packageName)) {
-        return res.status(400).json({ error: 'Invalid package name' });
+        return res.status(400).json({
+            error: 'Package not found in discovered openadapt packages',
+            hint: 'Package may not exist on PyPI yet',
+        });
     }
 
     // Whitelist allowed endpoints
