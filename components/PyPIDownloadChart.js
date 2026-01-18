@@ -73,14 +73,14 @@ const packageColors = {
         border: 'rgb(230, 126, 34)',
         background: 'rgba(230, 126, 34, 0.2)',
     },
-    'openadapt-tray': {
-        border: 'rgb(149, 165, 166)',
-        background: 'rgba(149, 165, 166, 0.2)',
-    },
-    'openadapt-telemetry': {
-        border: 'rgb(52, 73, 94)',
-        background: 'rgba(52, 73, 94, 0.2)',
-    },
+    // 'openadapt-tray': {
+    //     border: 'rgb(149, 165, 166)',
+    //     background: 'rgba(149, 165, 166, 0.2)',
+    // },
+    // 'openadapt-telemetry': {
+    //     border: 'rgb(52, 73, 94)',
+    //     background: 'rgba(52, 73, 94, 0.2)',
+    // },
     // 'openadapt-agent': {
     //     border: 'rgb(255, 99, 132)',
     //     background: 'rgba(255, 99, 132, 0.2)',

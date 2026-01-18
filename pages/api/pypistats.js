@@ -20,8 +20,8 @@ export default async function handler(req, res) {
         'openadapt-grounding',
         'openadapt-retrieval',
         'openadapt-privacy',
-        'openadapt-tray',
-        'openadapt-telemetry',
+        // 'openadapt-tray',      // TODO: Uncomment when published to PyPI
+        // 'openadapt-telemetry', // TODO: Uncomment when published to PyPI
     ];
 
     if (!allowedPackages.includes(packageName)) {

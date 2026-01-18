@@ -14,9 +14,9 @@ const PYPI_PACKAGES = [
     'openadapt-grounding',
     'openadapt-retrieval',
     'openadapt-privacy',
-    'openadapt-tray',
-    'openadapt-telemetry',
-    // 'openadapt-agent', // TODO: Uncomment when published to PyPI
+    // 'openadapt-tray',      // TODO: Uncomment when published to PyPI
+    // 'openadapt-telemetry', // TODO: Uncomment when published to PyPI
+    // 'openadapt-agent',     // TODO: Uncomment when published to PyPI
 ];
 
 /**
@@ -263,7 +263,7 @@ export async function getRecentDownloadStats() {
         totals,
         perPackage,
         topPackage,
-        packageCount: results.filter(r => r.recent).length,
+        packageCount: results.filter(r => r.status === 'fulfilled' && r.value?.recent).length,
     };
 }
 
